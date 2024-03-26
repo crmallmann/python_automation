@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\cibele.mallmann\Downloads\selenium_python\myenv
+set VIRTUAL_ENV=C:\python_automation\myenvC:\python_automation\myenv
 
 if not defined PROMPT set PROMPT=$P$G
 
