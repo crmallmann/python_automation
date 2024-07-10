@@ -1,0 +1,5 @@
+Minhas dúvidas:
+
+- entender melhor o env
+- os passos em comum, tem como componentizar para não ficar repetindo o código?
+- import sempre selenium e código abaixo sempre em python?

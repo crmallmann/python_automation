@@ -3,6 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from time import sleep
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 @pytest.fixture()
 def driver():
@@ -104,3 +106,53 @@ def test_locked_user(driver):
 
     error_message = driver.find_element(By.XPATH, "//h3[@data-test='error']")
     assert error_message.text == "Epic sadface: Sorry, this user has been locked out."
+
+def test_total_price(driver):
+    username = driver.find_element(By.NAME, "user-name")
+    username.send_keys("standard_user")
+
+    password = driver.find_element(By.NAME, "password")
+    password.send_keys("secret_sauce")
+
+    button = driver.find_element(By.ID, "login-button")
+    button.click()
+
+    products = driver.find_elements(By.XPATH, "//button[contains(@data-test, 'add-to-cart-')]")
+   
+    for product in products:
+        product.click()
+    
+    product_prices = driver.find_elements(By.CLASS_NAME, "inventory_item_price")
+
+    total_sum = 0
+
+    for item in product_prices:
+        price = item.text
+        price = price.replace("$", "")
+        total_sum = total_sum + float(price)
+    
+    cart = driver.find_element(By.CSS_SELECTOR, ".shopping_cart_link")
+    cart.click()
+
+    checkout_button = driver.find_element(By.NAME, "checkout")
+    checkout_button.click()
+
+    first_name = driver.find_element(By.NAME, "firstName")
+    first_name.send_keys("Paulo")
+
+    last_name = driver.find_element(By.NAME, "lastName")
+    last_name.send_keys("Oliveira")
+
+    postal_code = driver.find_element(By.NAME, "postalCode")
+    postal_code.send_keys("4000-000")
+
+    continue_button = driver.find_element(By.CLASS_NAME, "submit-button")
+    continue_button.click()
+
+    total_price = driver.find_element(By.CLASS_NAME, "summary_subtotal_label").text
+    total = total_price.split("$")[1]
+    total = float(total)
+    
+    assert total == total_sum
+
+    sleep(3)
